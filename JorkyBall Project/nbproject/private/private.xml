@@ -3,11 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< Updated upstream
             <file>file:/C:/Users/diogo/Documents/Git_Projects/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/bd.java</file>
             <file>file:/C:/Users/diogo/Documents/Git_Projects/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/jorkyball.java</file>
             <file>file:/C:/Users/diogo/Documents/Git_Projects/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/criarSocio.java</file>
             <file>file:/C:/Users/diogo/Documents/Git_Projects/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/Socio.java</file>
             <file>file:/C:/Users/diogo/Documents/Git_Projects/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/ConsoleFrame.java</file>
+=======
+            <file>file:/C:/Users/diogo/Documents/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/Socio.java</file>
+            <file>file:/C:/Users/diogo/Documents/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/ConsoleFrame.java</file>
+            <file>file:/C:/Users/diogo/Documents/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/bd.java</file>
+            <file>file:/C:/Users/diogo/Documents/JorkyBall-Project/JorkyBall%20Project/src/com/sirnugg3ts/jorkyball.java</file>
+>>>>>>> Stashed changes
         </group>
     </open-files>
 </project-private>
