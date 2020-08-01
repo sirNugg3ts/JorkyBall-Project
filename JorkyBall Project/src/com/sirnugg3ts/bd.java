@@ -5,9 +5,11 @@
  */
 package com.sirnugg3ts;
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +29,7 @@ public class bd {
             conn = DriverManager.getConnection(url, username, password);
             
         } catch (Exception ex) {
-            System.err.println("Erro ao ligar à base de dados");
+            JOptionPane.showMessageDialog(new Frame(), ex, "Erro!", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return null;
         }

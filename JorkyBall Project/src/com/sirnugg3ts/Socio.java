@@ -6,12 +6,14 @@
 package com.sirnugg3ts;
 
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -44,7 +46,7 @@ public class Socio {
             
                 patat.executeUpdate();
         }catch(SQLException e){
-            System.err.println(e);
+            JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -67,6 +69,7 @@ public class Socio {
             this.ID=-1;
             this.nome=null;
             this.creditos=-1;
+            JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
             
         }
     }
@@ -94,7 +97,7 @@ public class Socio {
             
             patat.executeUpdate();
         }catch(SQLException e){
-            System.err.println(e);
+            JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
