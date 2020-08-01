@@ -20,15 +20,16 @@ public class bd {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String username = "root";
-            String password = "4k60fps5ms";
-            String url = "jdbc:mysql://localhost:3306/socios?serverTimezone=UTC ";
+            String username = "sql7357963";
+            String password = "pJF4tRM45x";
+            String url = "jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7357963?serverTimezone=UTC ";
             
             conn = DriverManager.getConnection(url, username, password);
             
         } catch (Exception ex) {
             System.err.println("Erro ao ligar à base de dados");
             ex.printStackTrace();
+            return null;
         }
         return conn;
     }

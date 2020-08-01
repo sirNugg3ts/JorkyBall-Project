@@ -28,11 +28,15 @@ public class Socio {
     }
 
     public Socio() {
+        nome=null;
+        ID=-1;
+        creditos=-1;
+        
     }
     
     public void insereNovoSocio() throws SQLException{
         try(Connection conn = bd.connect();
-            PreparedStatement patat = conn.prepareStatement("INSERT INTO socios VALUES VALUES(?, ?, ?)")){
+            PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos) VALUES (?, ?, ?)")){
             
                 patat.setInt(1,ID);
                 patat.setString(2, nome);
@@ -60,11 +64,14 @@ public class Socio {
                 System.out.println("ID INVÁLIDO!");
         }catch(Exception e){
             System.err.println(e);
+            this.ID=-1;
+            this.nome=null;
+            this.creditos=-1;
+            
         }
     }
     
     public int getLastID() throws SQLException{
-        System.out.println("IM TRYING");
         try(Connection conn = bd.connect();
                 Statement stat = conn.createStatement()){
             boolean hasResultSet = stat.execute("SELECT id FROM socios ORDER BY id DESC limit 1");

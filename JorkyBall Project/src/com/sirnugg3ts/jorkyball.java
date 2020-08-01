@@ -12,6 +12,13 @@ public class jorkyball {
      */
     public static void main(String[] args) {
         
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ConsoleFrame().setVisible(true);
+            }
+        });
+        
+        
         boolean keepGoing = true;
         
         Scanner teclado = new Scanner(System.in);
@@ -105,11 +112,13 @@ public class jorkyball {
                 } catch (SQLException ex) {
                     System.err.println(ex);
                 }
+                Scanner readName = new Scanner(System.in);
                     System.out.println("O ID deste novo sócio será "+socio.getID());
                     
                     System.out.println("Insira o nome do novo sócio: ");
-                    teclado.next();
-                    socio.setNome(teclado.nextLine());
+                    socio.setNome(readName.nextLine());
+                    
+                    System.out.println(socio.getNome());
                     
                     socio.setCreditos(0);
                     
