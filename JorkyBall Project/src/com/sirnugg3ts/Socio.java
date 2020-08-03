@@ -36,7 +36,7 @@ public class Socio {
         
     }
     
-    public void insereNovoSocio() throws SQLException{
+    public boolean insereNovoSocio() throws SQLException{
         try(Connection conn = bd.connect();
             PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos) VALUES (?, ?, ?)")){
             
@@ -47,7 +47,10 @@ public class Socio {
                 patat.executeUpdate();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
+            return false;
+            
         }
+        return true;
     }
     
     public void getsSocioFromDB(int id) throws SQLException{
