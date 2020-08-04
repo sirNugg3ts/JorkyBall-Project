@@ -22,7 +22,7 @@ public class jorkyball {
             }
         });
 
-        if (args[0] == "-console") {
+        //if (args[0] == "-console") {
             boolean keepGoing = true;
 
             Scanner teclado = new Scanner(System.in);
@@ -144,5 +144,4 @@ public class jorkyball {
         }
 
     }
-
-}
+//}
