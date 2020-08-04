@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\diogo\Documents\Git_Projects\JorkyBall-Project\JorkyBall Project V1.0\JorkyBall_Project.jar</jar>
+  <outfile>C:\Users\diogo\Documents\Git_Projects\JorkyBall-Project\JorkyBall Pombal.exe</outfile>
+  <errTitle>Java não detetado</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\diogo\Downloads\logo_jorky_OBV_icon.ico</icon>
+  <classPath>
+    <mainClass>com.sirnugg3ts.jorkyball</mainClass>
+    <cp>lib/mysql-connector-java-8.0.21.jar</cp>
+    <cp>lib/commons-net-3.6.jar</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>11</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <versionInfo>
+    <fileVersion>1.0.0.0</fileVersion>
+    <txtFileVersion>1.0</txtFileVersion>
+    <fileDescription>JorkyBall Clube Pombal - Management Software</fileDescription>
+    <copyright>Diogo Pascoal, 2020</copyright>
+    <productVersion>1.0.0.0</productVersion>
+    <txtProductVersion>1.0</txtProductVersion>
+    <productName>JorkyBall Clube Pombal - Management Software</productName>
+    <companyName></companyName>
+    <internalName>JorkyBall Pombal</internalName>
+    <originalFilename>JorkyBall Pombal.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>PORTUGUESE_PORTUGAL</language>
+  </versionInfo>
+</launch4jConfig>
