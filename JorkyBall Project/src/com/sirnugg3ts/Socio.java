@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.sql.ResultSetMetaData;
 import javax.swing.JOptionPane;
 
+
 /**
  *
  * @author diogo
@@ -21,6 +22,12 @@ public class Socio {
     private String nome;
     private int ID;
     private int creditos;
+    private int numeroTlm;
+    private String email;
+    private java.sql.Date dataNascimento;
+    private java.sql.Date dataInscricao;
+    
+    
 
     public Socio(String nome, int ID) {
         this.nome = nome;
@@ -35,11 +42,15 @@ public class Socio {
     }
 
     public boolean insereNovoSocio() throws SQLException {
-        try ( Connection conn = bd.connect();  PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos) VALUES (?, ?, ?)")) {
+        try ( Connection conn = bd.connect();  PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos,email,nTlm,dataNascimento,dataInscricao) VALUES (?, ?, ?,?,?,?,?)")) {
 
             patat.setInt(1, ID);
             patat.setString(2, nome);
             patat.setInt(3, creditos);
+            patat.setString(4, email);
+            patat.setInt(5, numeroTlm);
+            patat.setDate(6, dataNascimento);
+            patat.setDate(7, dataInscricao);
 
             patat.executeUpdate();
         } catch (SQLException e) {
@@ -88,12 +99,31 @@ public class Socio {
         }
     }
 
-    public void updateCreditos() throws SQLException {
+    public void updateCreditos(boolean op,int alt) throws SQLException {
+        //if op == true -> adicionar
+        //if op == false -> remover
         try ( Connection conn = bd.connect();  PreparedStatement patat = conn.prepareStatement("UPDATE socios SET creditos = ? WHERE id = ?")) {
             patat.setInt(1, creditos);
             patat.setInt(2, ID);
 
             patat.executeUpdate();
+            conn.setSchema("historico_creditos");
+            
+            PreparedStatement patat2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?)");
+            patat2.setInt(1, ID);
+            
+            
+           
+            patat2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+            patat2.setInt(3, alt);
+            if (op) {
+                patat2.setString(4, "adicionar");
+            }else
+                patat2.setString(4, "remover");
+            
+            patat2.executeUpdate();
+            
+            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
@@ -151,5 +181,39 @@ public class Socio {
             e.printStackTrace();
         }
     }
+
+    public int getNumeroTlm() {
+        return numeroTlm;
+    }
+
+    public void setNumeroTlm(int numeroTlm) {
+        this.numeroTlm = numeroTlm;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public java.sql.Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(java.sql.Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public java.sql.Date getDataInscricao() {
+        return dataInscricao;
+    }
+
+    public void setDataInscricao(java.sql.Date dataInscricao) {
+        this.dataInscricao = dataInscricao;
+    }
+
+
 
 }

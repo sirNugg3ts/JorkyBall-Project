@@ -68,7 +68,7 @@ public class jorkyball {
                             socio.setCreditos(socio.getCreditos() - creditosAremover);
 
                             try {
-                                socio.updateCreditos();
+                                socio.updateCreditos(false,creditosAremover);
                             } catch (SQLException ex) {
                                 System.err.println(ex);
                             }
@@ -99,7 +99,7 @@ public class jorkyball {
                         } else {
                             socio.setCreditos(socio.getCreditos() + creditosAadicionar);
                             try {
-                                socio.updateCreditos();
+                                socio.updateCreditos(true,creditosAadicionar);
                             } catch (SQLException ex) {
                                 System.err.println(ex);
                             }
