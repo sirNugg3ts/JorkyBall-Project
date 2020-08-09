@@ -5,11 +5,13 @@
 
 package com.sirnugg3ts;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 public class ConsoleFrame extends javax.swing.JFrame {
@@ -27,6 +29,18 @@ public class ConsoleFrame extends javax.swing.JFrame {
         checkHistoryBtn.setEnabled(false);
                 jButton3.setEnabled(false);
                jButton2.setEnabled(false);
+               
+        try {
+            if (bd.connect()==null) {
+                JOptionPane.showMessageDialog(new Frame(), "Não foi possível ligar à base de dados\n"
+                        + "Todas as alterações serão guardadas em cache, sendo que caso o ficheiro seja apagado"
+                        + "todas as alterações serão perdidas!\n"
+                        + "Para sincronizar, feche e volte a abrir o programa com ligação à internet", "Erro!", JOptionPane.ERROR_MESSAGE); 
+               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsoleFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

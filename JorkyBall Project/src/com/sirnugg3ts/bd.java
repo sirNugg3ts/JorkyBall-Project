@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 
 
 public class bd {
+    
+    
 
     public static Connection connect() throws SQLException {
         Connection conn = null;
@@ -24,7 +26,6 @@ public class bd {
             conn = DriverManager.getConnection(url, username, password);
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(new Frame(), ex, "Erro!", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return null;
         }
