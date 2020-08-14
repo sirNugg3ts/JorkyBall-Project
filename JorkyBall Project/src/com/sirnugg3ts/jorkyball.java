@@ -4,7 +4,6 @@
 
 package com.sirnugg3ts;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -18,13 +17,13 @@ public class jorkyball {
     public static void main(String[] args) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new ConsoleFrame().setVisible(true);
 
             }
         });
 
-        //if (args[0] == "-console") {
             boolean keepGoing = true;
 
             Scanner teclado = new Scanner(System.in);
@@ -53,11 +52,9 @@ public class jorkyball {
 
                         Socio socio = new Socio();
 
-                        try {
+                       
                             socio.getsSocioFromDB(idSocio);
-                        } catch (SQLException ex) {
-                            System.err.println(ex);
-                        }
+                       
 
                         System.out.println("\nO sócio tem " + socio.getCreditos() + " créditos");
                         System.out.println("\nQuantos créditos deseja remover?");
@@ -69,11 +66,7 @@ public class jorkyball {
                         } else {
                             socio.setCreditos(socio.getCreditos() - creditosAremover);
 
-                            try {
                                 socio.updateCreditos(false,creditosAremover);
-                            } catch (SQLException ex) {
-                                System.err.println(ex);
-                            }
                         }
                         break;
                     }
@@ -85,11 +78,10 @@ public class jorkyball {
 
                         Socio socio = new Socio();
 
-                        try {
+                        
                             socio.getsSocioFromDB(idSocio);
-                        } catch (SQLException ex) {
-                            System.err.println(ex);
-                        }
+                       
+                       
 
                         System.out.println("\nO sócio tem " + socio.getCreditos() + " créditos");
                         System.out.println("\nQuantos créditos deseja adicionar?");
@@ -100,22 +92,14 @@ public class jorkyball {
                             System.out.println("Valor inválido");
                         } else {
                             socio.setCreditos(socio.getCreditos() + creditosAadicionar);
-                            try {
                                 socio.updateCreditos(true,creditosAadicionar);
-                            } catch (SQLException ex) {
-                                System.err.println(ex);
-                            }
                         }
                         break;
                     }
 
                     case 3: {
                         Socio socio = new Socio();
-                        try {
                             socio.setID(socio.getLastID() + 1);
-                        } catch (SQLException ex) {
-                            System.err.println(ex);
-                        }
                         Scanner readName = new Scanner(System.in);
                         System.out.println("O ID deste novo sócio será " + socio.getID());
 
@@ -126,12 +110,8 @@ public class jorkyball {
 
                         socio.setCreditos(0);
 
-                        try {
                             socio.insereNovoSocio();
                             System.out.println("Novo Sócio adicionado com sucesso!");
-                        } catch (SQLException ex) {
-                            System.err.println(ex);
-                        }
                         break;
                     }
                     case 4: {
@@ -146,4 +126,3 @@ public class jorkyball {
         }
 
     }
-//}

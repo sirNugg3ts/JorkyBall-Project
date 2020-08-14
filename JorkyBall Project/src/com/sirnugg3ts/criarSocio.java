@@ -3,14 +3,8 @@
 */
 package com.sirnugg3ts;
 
-import java.awt.Frame;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 
 public class criarSocio extends javax.swing.JFrame {
@@ -18,15 +12,8 @@ public class criarSocio extends javax.swing.JFrame {
     Socio newSocio = new Socio();
     String text;
 
-    /**
-     * Creates new form criarSocio
-     */
     public criarSocio() {
-        try {
             text = "ID: " + (newSocio.getLastID() + 1);
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        }
         initComponents();
     }
 
@@ -164,19 +151,13 @@ public class criarSocio extends javax.swing.JFrame {
         newSocio.setDataNascimento(DataNascimento);
         newSocio.setDataInscricao(new Date(Calendar.getInstance().getTimeInMillis()));
 
-        try {
-            // TODO add your handling code here:
             newSocio.setID(newSocio.getLastID() + 1);
-        } catch (SQLException ex) {
-            Logger.getLogger(criarSocio.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         newSocio.setNome(jTextField1.getText());
         newSocio.setCreditos(0);
         newSocio.setEmail(emailTextField.getText());
         newSocio.setNumeroTlm(Integer.parseInt(numeroTlmTextField.getText()));
 
-        try {
             success = newSocio.insereNovoSocio();
             text = "ID: " + newSocio.getLastID();
             if (success) {
@@ -184,10 +165,6 @@ public class criarSocio extends javax.swing.JFrame {
                 jButton1.setEnabled(false);
             }
 
-        } catch (SQLException ex) {
-                       JOptionPane.showMessageDialog(new Frame(), ex, "Erro!", JOptionPane.ERROR_MESSAGE);
-
-        }
 
 
     }//GEN-LAST:event_jButton1MouseClicked

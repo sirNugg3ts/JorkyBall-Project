@@ -3,6 +3,12 @@
 */
 package com.sirnugg3ts;
 
+/*
+    -Ao remover créditos, a verificação é efetuada client side, na função jButton3MouseClicked do ConsoleFrame.java, sendo que update_creditos apenas envia a informação e não efetua qualquer verificação
+
+
+*/
+
 import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,6 +24,8 @@ import javax.swing.JOptionPane;
  * @author diogo
  */
 public class Socio {
+    
+    //propriedades do sócio
 
     private String nome;
     private int ID;
@@ -26,24 +34,22 @@ public class Socio {
     private String email;
     private java.sql.Date dataNascimento;
     private java.sql.Date dataInscricao;
+    private int jogos_seguidos;
+    private int jogos_gratis;
     
     
-
-    public Socio(String nome, int ID) {
-        this.nome = nome;
-        this.ID = ID;
-    }
-
     public Socio() {
-        nome = null;
-        ID = -1;
+        nome=email=null;
+        ID = jogos_seguidos= jogos_gratis =-1;
         creditos = -1;
+        dataInscricao=dataNascimento=null;
 
     }
 
-    public boolean insereNovoSocio() throws SQLException {
-        try ( Connection conn = bd.connect();  PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos,email,nTlm,dataNascimento,dataInscricao) VALUES (?, ?, ?,?,?,?,?)")) {
-
+    public boolean insereNovoSocio(){
+        //returns true if sucess uploading the new Socio
+        try ( Connection conn = bd.connect()) {
+            PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos,email,nTlm,dataNascimento,dataInscricao) VALUES (?, ?, ?,?,?,?,?)");
             patat.setInt(1, ID);
             patat.setString(2, nome);
             patat.setInt(3, creditos);
@@ -56,14 +62,16 @@ public class Socio {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
             return false;
-
         }
         return true;
     }
 
-    public void getsSocioFromDB(int id) throws SQLException {
-        try ( Connection conn = bd.connect();  Statement stat = conn.createStatement()) {
-            boolean hasResultSet = stat.execute("SELECT nome,creditos FROM socios WHERE id = " + id);
+    public void getsSocioFromDB(int id){
+        //gets ALL the info from an id
+        try ( Connection conn = bd.connect()) {
+            
+            Statement stat = conn.createStatement();
+            boolean hasResultSet = stat.execute("SELECT nome,creditos,email,nTlm,dataNascimento,dataInscricao,jogos_seguidos,jogos_gratis FROM socios WHERE id = " + id);
             if (hasResultSet) {
                 ResultSet resultado = stat.getResultSet();
                 resultado.next();
@@ -71,21 +79,23 @@ public class Socio {
                 this.ID = id;
                 this.nome = resultado.getString("nome");
                 this.creditos = resultado.getInt("creditos");
-            } else {
-                System.out.println("ID INVÁLIDO!");
-
-            }
+                this.email = resultado.getString("email");
+                this.numeroTlm = resultado.getInt("nTlm");
+                this.dataNascimento = resultado.getDate("dataNascimento");
+                this.dataInscricao = resultado.getDate("dataInscricao");
+                this.jogos_seguidos = resultado.getInt("jogos_seguidos");
+                this.jogos_gratis = resultado.getInt("jogos_gratis");
+            } 
         } catch (Exception e) {
             System.err.println(e);
-            this.ID = -1;
-            this.nome = null;
-            this.creditos = -1;
+            this.nome = this.email=null;
+            ID = creditos = numeroTlm = jogos_gratis = jogos_seguidos = -1;
+            dataNascimento = dataInscricao = null;
             JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
-
         }
     }
 
-    public int getLastID() throws SQLException {
+    public int getLastID()  {
         try ( Connection conn = bd.connect();  Statement stat = conn.createStatement()) {
             boolean hasResultSet = stat.execute("SELECT id FROM socios ORDER BY id DESC limit 1");
             if (hasResultSet) {
@@ -93,41 +103,58 @@ public class Socio {
                 resultado.next();
 
                 return resultado.getInt("id");
-            } else {
-                return -1;
             }
+        } catch (SQLException ex) {
         }
+        return -1;
     }
 
-    public void updateCreditos(boolean op,int alt) throws SQLException {
+    public void updateCreditos(boolean op,int alt) {
         //if op == true -> adicionar
         //if op == false -> remover
-        try ( Connection conn = bd.connect();  PreparedStatement patat = conn.prepareStatement("UPDATE socios SET creditos = ? WHERE id = ?")) {
+        //alt -> quantidade de créditos a serem usados
+        
+        //o objeto Sócio do programa já está atualizado, esta função irá apenas enviar a informação
+        
+        try ( Connection conn = bd.connect()) {
+            
+            PreparedStatement patat = conn.prepareStatement("UPDATE socios SET creditos = ? WHERE id = ?");
+            
             patat.setInt(1, creditos);
             patat.setInt(2, ID);
-
             patat.executeUpdate();
-            conn.setSchema("historico_creditos");
+            
+            //vai registar a alteração na tabela historico_creditos
+            //SE ESTA FUNÇÃO NÃO ESTIVER A FUNCIONAR, INSERIR conn.setSchema("historico_creditos")
             
             PreparedStatement patat2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?)");
             patat2.setInt(1, ID);
-            
-            
-           
             patat2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
             patat2.setInt(3, alt);
+            
             if (op) {
                 patat2.setString(4, "adicionar");
             }else
                 patat2.setString(4, "remover");
             
-            patat2.executeUpdate();
-            
-            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    public void updateJogosSeguidos(){
+        try(Connection conn = bd.connect()){
+            PreparedStatement p = conn.prepareStatement("UPDATE socios SET jogos_seguidos=?,jogos_gratis=? WHERE id=?");
+            p.setInt(1, jogos_seguidos);
+            p.setInt(2, jogos_gratis);
+            p.setInt(3, ID);
+            p.executeUpdate();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(new Frame(), e,"erro",JOptionPane.ERROR);
+        }
+    }
+    
+   
 
     public String getNome() {
         return nome;
@@ -212,6 +239,22 @@ public class Socio {
 
     public void setDataInscricao(java.sql.Date dataInscricao) {
         this.dataInscricao = dataInscricao;
+    }
+
+    public int getJogos_seguidos() {
+        return jogos_seguidos;
+    }
+
+    public void setJogos_seguidos(int jogos_seguidos) {
+        this.jogos_seguidos = jogos_seguidos;
+    }
+
+    public int getJogos_gratis() {
+        return jogos_gratis;
+    }
+
+    public void setJogos_gratis(int jogos_gratis) {
+        this.jogos_gratis = jogos_gratis;
     }
 
 

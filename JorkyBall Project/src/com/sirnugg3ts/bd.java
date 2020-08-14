@@ -26,7 +26,6 @@ public class bd {
             conn = DriverManager.getConnection(url, username, password);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             return null;
         }
         return conn;
