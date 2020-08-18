@@ -126,16 +126,21 @@ public class Socio {
             
             //vai registar a alteração na tabela historico_creditos
             //SE ESTA FUNÇÃO NÃO ESTIVER A FUNCIONAR, INSERIR conn.setSchema("historico_creditos")
+            //conn.setSchema("historico_creditos");
             
             PreparedStatement patat2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?)");
             patat2.setInt(1, ID);
-            patat2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-            patat2.setInt(3, alt);
+            java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+            patat2.setDate(2,sqlDate);
+            patat2.setInt(3,alt);
+            
             
             if (op) {
                 patat2.setString(4, "adicionar");
             }else
                 patat2.setString(4, "remover");
+            
+            patat2.executeUpdate();
             
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
