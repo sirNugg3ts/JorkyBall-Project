@@ -2,19 +2,18 @@ package com.sirnugg3ts;
 
 import java.awt.Frame;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;
 
 public class massInsert extends javax.swing.JFrame {
 
     ArrayList<Integer> listaID = new ArrayList<>();
     ArrayList<Integer> listaDeIDaAlterar = new ArrayList<>();
-
 
     public massInsert() {
         initComponents();
@@ -57,7 +56,6 @@ public class massInsert extends javax.swing.JFrame {
         model.addRow(row);
         jTable1.setModel(model);
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -231,91 +229,122 @@ public class massInsert extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        // TODO add your handling code here:
-        // - FALTA ADICIONAR AS TRANSICOES AO HISTORICO (JOGOS GRATIS JA ESTAO A SER ATUALIZADOS)
+
+        //CREDITOS REMOVIDOS NÃO ESTÃO A SER CORRETAMENTE ATUALIZADOS
         int creditosRem = Integer.parseInt(jTextField1.getText());
 
         for (int i = 0; i < listaDeIDaAlterar.size(); i++) {
 
+            int creditosATirar = creditosRem;
+            int freeGamesToUse = 0;
+
             Socio socio_atualizar = new Socio();
             socio_atualizar.getsSocioFromDB(listaDeIDaAlterar.get(i));
 
-            for (int j = 1; j < creditosRem + 1; j++) {
+            //verificar se tem creditos suficientes ou jogos grátis para 
+            if (socio_atualizar.getCreditos() + socio_atualizar.getJogos_gratis() < creditosRem) {
 
-                if (socio_atualizar.getCreditos() - creditosRem < 0) {
-                    JOptionPane.showMessageDialog(new Frame(), "O Sócio com ID " + socio_atualizar.getID() + " não tem créditos suficientes", "Erro de créditos!", JOptionPane.WARNING_MESSAGE);
-                    break;
-                } else {
+                JOptionPane.showMessageDialog(new Frame(), "O Sócio com ID " + socio_atualizar.getID() + " não tem créditos suficientes\n"
+                        + "Não serão removidos créditos", "Erro de créditos!", JOptionPane.WARNING_MESSAGE);
 
-                    if (socio_atualizar.getJogos_gratis() >= 1) {
-                        
-                        Object[] options = {"Sim", "Não"};
-                        int opcao = JOptionPane.showOptionDialog(null,
-                                "O sócio " + socio_atualizar.getNome() + " tem um jogo grátis por usar, deseja utilizar?",
-                                "Jogo Grátis por usar",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                options,
-                                "Não");
+                break;
 
-                        if (opcao == 0) {
-                            socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis() - 1);
+            } else // se conseguir pagar com os jogos gratis que tem
+            if (socio_atualizar.getJogos_gratis() >= creditosRem) {
 
-                            try {
-                                Connection conn = bd.connectToHistory();
+                Object[] options = {"Sim", "Não"};
+                int opcao = JOptionPane.showOptionDialog(null, "O sócio " + socio_atualizar.getNome() + " tem jogos grátis que pode usar em vez de créditos (que não são suficientes), deseja utilizar?",
+                        "Jogo Grátis por usar",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "Não");
+                if (opcao == 0) {
+                    socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis() - creditosRem);
+                    try {
+                        Connection conn = bd.connect();
 
-                                //retirar o jogo gratis na BD
-                                PreparedStatement ps = conn.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - 1 WHERE id=?");
-                                ps.setInt(1, socio_atualizar.getID());
+                        //retirar o jogo gratis na BD
+                        PreparedStatement ps = conn.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - ? WHERE id=?");
+                        ps.setInt(1, creditosRem);
+                        ps.setInt(2, socio_atualizar.getID());
 
-                                ps.executeUpdate();
+                        ps.executeUpdate();
 
-                                //registar no historico de creditos
-                                PreparedStatement ps2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?) ");
-                                ps2.setInt(1, socio_atualizar.getID());
-                                ps2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-                                ps2.setInt(3, 0);
-                                ps2.setString(4, "Jogo Grátis");
+                        //registar no historico de creditos
+                        PreparedStatement ps2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?) ");
+                        ps2.setInt(1, socio_atualizar.getID());
+                        ps2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+                        ps2.setInt(3, 1);
+                        ps2.setString(4, "Jogo Grátis");
+                        ps2.executeUpdate();
 
-                                ps2.executeUpdate();
-
-                            } catch (SQLException ex) {
-                                JOptionPane.showMessageDialog(new Frame(), ex,"erro",JOptionPane.ERROR);
-                            }
-
-                        } else {
-                            socio_atualizar.setCreditos(socio_atualizar.getCreditos() - 1);
-                            socio_atualizar.updateCreditos(false, 1);
-                            socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos() + 1);
-                            while (socio_atualizar.getJogos_seguidos() >= 10) {
-                                socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis() + 1);
-                                socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos() - 10);
-                                JOptionPane.showMessageDialog(new Frame(), "O sócio " + socio_atualizar.getNome() + " ganhou 1 jogo grátis!", "Jogo Grátis!", JOptionPane.INFORMATION_MESSAGE);
-                            }
-                            socio_atualizar.updateJogosSeguidos();
-                        }
-                    } else {
-                        socio_atualizar.setCreditos(socio_atualizar.getCreditos() - 1);
-                        socio_atualizar.updateCreditos(false, 1);
-                        socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos() + 1);
-                        while (socio_atualizar.getJogos_seguidos() >= 10) {
-                            socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis() + 1);
-                            socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos() - 10);
-                            JOptionPane.showMessageDialog(new Frame(), "O sócio " + socio_atualizar.getNome() + " ganhou 1 jogo grátis!", "Jogo Grátis!", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        socio_atualizar.updateJogosSeguidos();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(new Frame(), ex, "erro", JOptionPane.ERROR);
                     }
 
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "O sócio " + socio_atualizar.getNome() + " não tem créditos suficientes!", "Faltam créditos!", JOptionPane.ERROR);
+                    break;
                 }
             }
+
+            for (int j = 0; j < creditosRem; j++) {
+
+                //se tiver jogos gratis perguntar se o quer usar
+                if (socio_atualizar.getJogos_gratis() > 0) {
+
+                    Object[] options = {"Sim", "Não"};
+                    int opcao = JOptionPane.showOptionDialog(null, "O sócio " + socio_atualizar.getNome() + " tem um jogo grátis que pode usar em vez de um crédito, deseja utilizar?",
+                            "Jogo Grátis por usar",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "Não");
+                    if (opcao == 0) {
+                        socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis() - 1);
+                        //atualizar no servidor
+
+                        try ( Connection con = bd.connect()) {
+                            PreparedStatement ps = con.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - ? WHERE id=?");
+                            ps.setInt(1, 1);
+                            ps.setInt(2, socio_atualizar.getID());
+                            ps.executeUpdate();
+
+                            //registar no historico de creditos os jogos gratis
+                            PreparedStatement ps2 = con.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?) ");
+                            ps2.setInt(1, socio_atualizar.getID());
+                            ps2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+                            ps2.setInt(3, 0);
+                            ps2.setString(4, "Jogo Grátis");
+                            ps2.executeUpdate();
+                        } catch (SQLException e) {
+
+                        }
+
+                    }
+
+                } else {
+                    //se não tiver jogos gratis para usar, tirar 1 crédito
+                    socio_atualizar.setCreditos(socio_atualizar.getCreditos() - 1);
+                    socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos()+1);
+                    
+                    
+                    if (socio_atualizar.getJogos_seguidos()>=jorkyball.JOGOSGRATIS) {
+                        JOptionPane.showMessageDialog(new Frame(), "O sócio "+socio_atualizar.getNome() + "ganhou 1 jogo grátis!","Jogo Grátis!",JOptionPane.INFORMATION_MESSAGE);
+                        socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos()-jorkyball.JOGOSGRATIS);
+                        socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis()+1);
+                        
+                    }
+                    socio_atualizar.updateCreditos(false, 1);
+                    socio_atualizar.updateJogosSeguidos();
+                    
+                    
+                }
+
+            }
+
         }
     }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
      */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idadicionar;
     private javax.swing.JButton jButton1;

@@ -286,7 +286,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
                 
                 //se tiver 10 jogos seguidos ou mais, o socio ganha um jogo grátis
                 
-                while(socio.getJogos_seguidos()>=10){
+                while(socio.getJogos_seguidos()>=jorkyball.JOGOSGRATIS){
                     socio.setJogos_gratis(socio.getJogos_gratis()+1);
                     socio.setJogos_seguidos(socio.getJogos_seguidos()-10);
                     JOptionPane.showMessageDialog(new Frame(), "O sócio "+socio.getNome() + "ganhou 1 jogo grátis!","Jogo Grátis!",JOptionPane.INFORMATION_MESSAGE);

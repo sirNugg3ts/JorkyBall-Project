@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 public class jorkyball {
     
+    public static int JOGOSGRATIS =10;
+    
     
 
     /**
