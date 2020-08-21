@@ -5,12 +5,14 @@ package com.sirnugg3ts;
 
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import javax.swing.ImageIcon;
 
 public class ConsoleFrame extends javax.swing.JFrame {
 
@@ -265,44 +267,73 @@ public class ConsoleFrame extends javax.swing.JFrame {
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
 
         //botão para remover créditos
-        
-        
         int creditosRem = Integer.parseInt(howMuchLabel.getText());
-       
-            if (socio.getCreditos() - creditosRem < 0) {
-                System.err.println("Quantidade Inválida");
-                JOptionPane.showMessageDialog(new Frame(), "O sócio não tem créditos suficientes!", "Quantidade Inválida", JOptionPane.WARNING_MESSAGE);
-            } else {
-                socio.setCreditos(socio.getCreditos() - creditosRem);
-                
-                if (creditosRem > 1) {
-                    JOptionPane.showMessageDialog(new Frame(), "Atenção!\nCada crédito corresponde a 1 jogo para obter o jogo grátis\n"
-                            + "Caso este não seja o objetivo, por favor informar Diogo Pascoal para corrigir o erro!", "Warning", JOptionPane.INFORMATION_MESSAGE);
-                }
-                
-                socio.updateCreditos(false, creditosRem);
-                
-                socio.setJogos_seguidos(socio.getJogos_seguidos()+creditosRem);
-                
-                //se tiver 10 jogos seguidos ou mais, o socio ganha um jogo grátis
-                
-                while(socio.getJogos_seguidos()>=jorkyball.JOGOSGRATIS){
-                    socio.setJogos_gratis(socio.getJogos_gratis()+1);
-                    socio.setJogos_seguidos(socio.getJogos_seguidos()-10);
-                    JOptionPane.showMessageDialog(new Frame(), "O sócio "+socio.getNome() + "ganhou 1 jogo grátis!","Jogo Grátis!",JOptionPane.INFORMATION_MESSAGE);
-                }
-                
-                socio.updateJogosSeguidos();
 
-                System.out.println("Info uplodaded");
+        if (socio.getCreditos() - creditosRem < 0) {
+            System.err.println("Quantidade Inválida");
+            JOptionPane.showMessageDialog(new Frame(), "O sócio não tem créditos suficientes!", "Quantidade Inválida", JOptionPane.WARNING_MESSAGE);
+        } else {
+            if (creditosRem > 1) {
+                JOptionPane.showMessageDialog(new Frame(), "Atenção!\nCada crédito corresponde a 1 jogo para obter o jogo grátis\n"
+                        + "Caso este não seja o objetivo, por favor informar Diogo Pascoal para corrigir o erro!", "Warning", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            for (int j = 0; j < creditosRem; j++) {
+
+                //se tiver jogos gratis perguntar se o quer usar
+                if (socio.getJogos_gratis() > 0 && creditosRem > 1 && j>0) {
+
+                    Object[] options = {"Sim", "Não"};
+                    int opcao = JOptionPane.showOptionDialog(null, "O sócio " + socio.getNome() + " tem um jogo grátis que pode usar em vez de um crédito, deseja utilizar?",
+                            "Jogo Grátis por usar",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "Não");
+                    if (opcao == 0) {
+                        socio.setJogos_gratis(socio.getJogos_gratis() - 1);
+                        //atualizar no servidor
+
+                        try ( Connection con = bd.connect()) {
+                            PreparedStatement ps = con.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - ? WHERE id=?");
+                            ps.setInt(1, 1);
+                            ps.setInt(2, socio.getID());
+                            ps.executeUpdate();
+
+                            //registar no historico de creditos os jogos gratis
+                            PreparedStatement ps2 = con.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?) ");
+                            ps2.setInt(1, socio.getID());
+                            ps2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+                            ps2.setInt(3, 0);
+                            ps2.setString(4, "Jogo Grátis");
+                            ps2.executeUpdate();
+                        } catch (SQLException e) {
+
+                        }
+
+                    }
+
+                } else {
+                    //se não tiver jogos gratis para usar, tirar 1 crédito
+                    socio.setCreditos(socio.getCreditos() - 1);
+                    socio.setJogos_seguidos(socio.getJogos_seguidos() + 1);
+
+                    if (socio.getJogos_seguidos() >= jorkyball.JOGOSGRATIS) {
+                        JOptionPane.showMessageDialog(new Frame(), "O sócio " + socio.getNome() + "ganhou 1 jogo grátis!", "Jogo Grátis!", JOptionPane.INFORMATION_MESSAGE);
+                        socio.setJogos_seguidos(socio.getJogos_seguidos() - jorkyball.JOGOSGRATIS);
+                        socio.setJogos_gratis(socio.getJogos_gratis() + 1);
+
+                    }
+                    socio.updateCreditos(false, 1);
+                    socio.updateJogosSeguidos();
+
+                }
 
             }
-        
+        }
+
         updateInfo();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-            //botão que adiciona créditos
+        //botão que adiciona créditos
         int creditosAdd = Integer.parseInt(howMuchLabel.getText());
         System.out.println("Adicionar " + creditosAdd + "creditos");
         if (socio.getID() == -1) {
@@ -346,36 +377,33 @@ public class ConsoleFrame extends javax.swing.JFrame {
 
     private void jogogratisBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jogogratisBtnMouseClicked
         //função quando o jogador quer usar um jogo grátis
-        
-        socio.setJogos_gratis(socio.getJogos_gratis()-1);
-        
+
+        socio.setJogos_gratis(socio.getJogos_gratis() - 1);
+
         try {
             Connection conn = bd.connectToHistory();
-            
+
             //retirar o jogo gratis na BD
             PreparedStatement ps = conn.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - 1 WHERE id=?");
             ps.setInt(1, socio.getID());
-            
+
             ps.executeUpdate();
-            
+
             //registar no historico de creditos
-            
             PreparedStatement ps2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?) ");
             ps2.setInt(1, socio.getID());
             ps2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
             ps2.setInt(3, 0);
             ps2.setString(4, "Jogo Grátis");
-            
+
             ps2.executeUpdate();
-            
-            
+
         } catch (SQLException ex) {
-            
+
         }
-        
+
         updateInfo();
-        
-        
+
 
     }//GEN-LAST:event_jogogratisBtnMouseClicked
 
@@ -403,18 +431,17 @@ public class ConsoleFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void updateInfo() {
-        
+
+        ImageIcon foto;
+
         //esta funcao apenas atualiza o NOME, ID, CRÉDITOS e JOGOS GRATIS
         //o resto da informação está atualizada no sócio mas esta função apenas atualiza o GUI
-        
         boolean isOnServer; //verifica se a foto está no servidor
         File file = new File("./img/" + socio.getID() + ".png"); //tenta obter o ficheiro da foto local
-        
+
         //jLabel1 -> Nome do sócio
         //jLabel2 -> ID do sócio
         //jLabel3 -> créditos do sócio
-        
-        
         jLabel1.setText(String.valueOf(socio.getID()));
         jLabel2.setText("Nome: " + socio.getNome());
         jLabel3.setText("Créditos: " + String.valueOf(socio.getCreditos()));
@@ -426,18 +453,33 @@ public class ConsoleFrame extends javax.swing.JFrame {
                 System.out.println(isOnServer);
                 if (isOnServer) {
                     ftpClient.fileDownload(socio.getID());
-                    profilePiicture.setIcon(new javax.swing.ImageIcon("./img/" + socio.getID() + ".png"));
+
+                    foto = new ImageIcon("./img/" + socio.getID() + ".png");
+                    Image image = foto.getImage();
+                    Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
+                    foto = new ImageIcon(newImage);
+                    profilePiicture.setIcon(foto);
+
                 } else {
-                    profilePiicture.setIcon(new javax.swing.ImageIcon("./img/" + socio.getID() + ".png"));
+                    foto = new ImageIcon("./img/" + socio.getID() + ".png");
+                    Image image = foto.getImage();
+                    Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
+                    foto = new ImageIcon(newImage);
+                    profilePiicture.setIcon(foto);
                     System.out.println("it aint here or server");
                 }
 
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(new Frame(), ex,"erro",JOptionPane.ERROR);
+                JOptionPane.showMessageDialog(new Frame(), ex, "erro", JOptionPane.ERROR);
             }
 
         } else {
-            profilePiicture.setIcon(new javax.swing.ImageIcon("./img/" + socio.getID() + ".png"));
+            foto = new ImageIcon("./img/" + socio.getID() + ".png");
+            Image image = foto.getImage();
+            Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
+            foto = new ImageIcon(newImage);
+            profilePiicture.setIcon(foto);
+            //profilePiicture.setIcon(new javax.swing.ImageIcon("./img/" + socio.getID() + ".png"));
         }
 
         if (socio.getID() != -1) {
@@ -448,22 +490,21 @@ public class ConsoleFrame extends javax.swing.JFrame {
             checkHistoryBtn.setContentAreaFilled(true);
             jButton2.setContentAreaFilled(true);
             jButton3.setContentAreaFilled(true);
-            
-            if (socio.getJogos_gratis()>0) {
-                
+
+            if (socio.getJogos_gratis() > 0) {
+
                 //se tiver um jogo grátis para usar
-                
-                jLabel4.setText("Jogos grátis: "+socio.getJogos_gratis());
+                jLabel4.setText("Jogos grátis: " + socio.getJogos_gratis());
                 jLabel4.setForeground(new Color(51, 153, 51));
                 jogogratisBtn.setEnabled(true);
                 jogogratisBtn.setContentAreaFilled(true);
-            }else{
+            } else {
                 jLabel4.setText("Jogos Grátis: 0");
                 jLabel4.setForeground(Color.black);
                 jogogratisBtn.setEnabled(false);
                 jogogratisBtn.setContentAreaFilled(false);
             }
-            
+
         } else {
             checkHistoryBtn.setEnabled(false);
             jButton3.setEnabled(false);
