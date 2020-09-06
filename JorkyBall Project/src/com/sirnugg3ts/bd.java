@@ -3,7 +3,6 @@
 */
 package com.sirnugg3ts;
 
-import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,8 +13,8 @@ public class bd {
     
     
 
-    public static Connection connect() throws SQLException {
-        Connection conn = null;
+    public static Connection connect(){
+        Connection conn;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -25,13 +24,14 @@ public class bd {
 
             conn = DriverManager.getConnection(url, username, password);
 
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex, "Erro!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
         return conn;
     }
-    public static Connection connectToHistory() throws SQLException{
-        Connection conn = null;
+    public static Connection connectToHistory(){
+        Connection conn;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -42,9 +42,8 @@ public class bd {
             conn = DriverManager.getConnection(url, username, password);
             
 
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(new Frame(), ex, "Erro!", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+        } catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex, "Erro!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
         return conn;

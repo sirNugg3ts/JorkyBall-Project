@@ -21,26 +21,22 @@ public class ConsoleFrame extends javax.swing.JFrame {
     public ConsoleFrame() {
 
         initComponents();
-        getRootPane().setDefaultButton(jButton1);
-        jTextField1.requestFocus();
+        
+        
+        getRootPane().setDefaultButton(searchBtn);
+        idTextField.requestFocus();
 
         //botões desativados enquanto não tiver sócio
-        checkHistoryBtn.setEnabled(false);
-        jButton3.setEnabled(false);
-        jButton2.setEnabled(false);
-        jogogratisBtn.setEnabled(false);
+        disableButtons();
         //
 
-        try {
-            if (bd.connect() == null) {
-                JOptionPane.showMessageDialog(new Frame(), "Não foi possível ligar à base de dados\n"
-                        + "O programa ainda não consegue funcionar em modo offline!\n"
-                        + "Obtenha ligação à internet e volte a abrir o programa", "Erro!", JOptionPane.ERROR_MESSAGE);
-                dispose();
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
+        if (bd.connect() == null) {
+            JOptionPane.showMessageDialog(new Frame(), "Não foi possível ligar à base de dados\n"
+                    + "O programa ainda não consegue funcionar em modo offline!\n"
+                    + "Obtenha ligação à internet e volte a abrir o programa", "Erro!", JOptionPane.ERROR_MESSAGE);
+            dispose();
         }
+
     }
 
     /**
@@ -54,21 +50,22 @@ public class ConsoleFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         SelectedIDlabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        idTextField = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JButton();
+        idLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        labelCreditos = new javax.swing.JLabel();
+        addCreditsBtn = new javax.swing.JButton();
+        substractBtn = new javax.swing.JButton();
         howMuchLabel = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        profilePiicture = new javax.swing.JLabel();
+        newSocioBtn = new javax.swing.JButton();
+        profilePicture = new javax.swing.JLabel();
         checkHistoryBtn = new javax.swing.JButton();
         massInsertBtn = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        freeGamesLabel = new javax.swing.JLabel();
         jogogratisBtn = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
+        jogosSeguidosLabel = new javax.swing.JLabel();
+        fichaSocioBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JorkyBall Club Pombal");
@@ -82,56 +79,56 @@ public class ConsoleFrame extends javax.swing.JFrame {
         SelectedIDlabel.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         SelectedIDlabel.setText("ID:");
 
-        jTextField1.setToolTipText("id");
-        jTextField1.requestFocus();
+        idTextField.setToolTipText("");
+        idTextField.requestFocus();
 
-        jButton1.setText("Search");
-        jButton1.setToolTipText("");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        searchBtn.setText("Search");
+        searchBtn.setToolTipText("");
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                searchBtnMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                searchBtnActionPerformed(evt);
             }
         });
-        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+        searchBtn.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jButton1KeyPressed(evt);
+                searchBtnKeyPressed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("--");
+        idLabel.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        idLabel.setText("--");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel2.setText("Nome: --");
+        nameLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        nameLabel.setText("Nome: --");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Créditos: --");
+        labelCreditos.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        labelCreditos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelCreditos.setText("Créditos: --");
 
-        jButton2.setText("Adicionar");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        addCreditsBtn.setText("Adicionar");
+        addCreditsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                addCreditsBtnMouseClicked(evt);
             }
         });
 
-        jButton3.setText("Subtrair");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        substractBtn.setText("Subtrair");
+        substractBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
+                substractBtnMouseClicked(evt);
             }
         });
 
-        jButton4.setText("Novo Sócio");
-        jButton4.setToolTipText("");
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        newSocioBtn.setText("Novo Sócio");
+        newSocioBtn.setToolTipText("");
+        newSocioBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                newSocioBtnMouseClicked(evt);
             }
         });
 
@@ -150,8 +147,8 @@ public class ConsoleFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel4.setText("Jogos Grátis: 0");
+        freeGamesLabel.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        freeGamesLabel.setText("Jogos Grátis: 0");
 
         jogogratisBtn.setText("Usar Jogo Grátis");
         jogogratisBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -160,7 +157,15 @@ public class ConsoleFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("jogos seguidos: 0");
+        jogosSeguidosLabel.setText("jogos seguidos: 0");
+
+        fichaSocioBtn.setText("Ficha Sócio");
+        fichaSocioBtn.setToolTipText("");
+        fichaSocioBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fichaSocioBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -171,46 +176,47 @@ public class ConsoleFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(SelectedIDlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel1))
+                                        .addComponent(idLabel))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(massInsertBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(profilePiicture, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(checkHistoryBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(newSocioBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(checkHistoryBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fichaSocioBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(34, 34, 34))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addCreditsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
                         .addComponent(howMuchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jogogratisBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(substractBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(170, 170, 170)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(freeGamesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(182, 182, 182)
-                        .addComponent(jLabel5)))
+                        .addComponent(jogosSeguidosLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -221,35 +227,37 @@ public class ConsoleFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(SelectedIDlabel)
-                            .addComponent(jLabel1))
+                            .addComponent(idLabel))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1))
+                            .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchBtn))
                         .addGap(18, 18, 18))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(massInsertBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9)))
-                .addComponent(jLabel2)
+                .addComponent(nameLabel)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(profilePiicture, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
-                        .addComponent(jLabel3))
+                        .addComponent(labelCreditos))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(checkHistoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(73, 73, 73)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(newSocioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(73, 73, 73)
+                        .addComponent(fichaSocioBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(freeGamesLabel)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(jogosSeguidosLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(addCreditsBtn)
                     .addComponent(howMuchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(substractBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jogogratisBtn)
                 .addContainerGap())
@@ -269,16 +277,14 @@ public class ConsoleFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+    private void newSocioBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newSocioBtnMouseClicked
         //abre janela para criar um novo sócio
         criarSocio criarSocio1 = new criarSocio();
         criarSocio1.setVisible(true);
-    }//GEN-LAST:event_jButton4MouseClicked
+    }//GEN-LAST:event_newSocioBtnMouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void substractBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_substractBtnMouseClicked
 
-        int creditosAtirar=0;
-        
         //botão para remover créditos
         int creditosRem = Integer.parseInt(howMuchLabel.getText());
 
@@ -294,7 +300,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
             for (int j = 0; j < creditosRem; j++) {
 
                 //se tiver jogos gratis perguntar se o quer usar
-                if (socio.getJogos_gratis() > 0 && creditosRem > 1 && j>0) {
+                if (socio.getJogos_gratis() > 0 && creditosRem > 1 && j > 0) {
 
                     Object[] options = {"Sim", "Não"};
                     int opcao = JOptionPane.showOptionDialog(null, "O sócio " + socio.getNome() + " tem um jogo grátis que pode usar em vez de um crédito, deseja utilizar?",
@@ -343,9 +349,9 @@ public class ConsoleFrame extends javax.swing.JFrame {
         }
 
         updateInfo();
-    }//GEN-LAST:event_jButton3MouseClicked
+    }//GEN-LAST:event_substractBtnMouseClicked
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void addCreditsBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addCreditsBtnMouseClicked
         //botão que adiciona créditos
         int creditosAdd = Integer.parseInt(howMuchLabel.getText());
         System.out.println("Adicionar " + creditosAdd + "creditos");
@@ -358,25 +364,25 @@ public class ConsoleFrame extends javax.swing.JFrame {
             System.out.println("Informação uploaded");
             updateInfo();
         }
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_addCreditsBtnMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void searchBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBtnMouseClicked
         //search button - gets socio from DB
-        socio.getsSocioFromDB(Integer.parseInt(jTextField1.getText()));
+        socio.getsSocioFromDB(Integer.parseInt(idTextField.getText()));
         updateInfo();
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_searchBtnMouseClicked
 
-    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+    private void searchBtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBtnKeyPressed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_jButton1KeyPressed
+    }//GEN-LAST:event_searchBtnKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        socio.getsSocioFromDB(Integer.parseInt(jTextField1.getText()));
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        socio.getsSocioFromDB(Integer.parseInt(idTextField.getText()));
         updateInfo();
 
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_searchBtnActionPerformed
 
     private void checkHistoryBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkHistoryBtnMouseClicked
         CheckHistory ch = new CheckHistory(socio.getID());
@@ -393,13 +399,17 @@ public class ConsoleFrame extends javax.swing.JFrame {
 
         socio.setJogos_gratis(socio.getJogos_gratis() - 1);
 
-        try {
-            Connection conn = bd.connectToHistory();
+        try ( Connection conn = bd.connectToHistory()) {
 
-            //retirar o jogo gratis na BD
+            //retirar 1 jogo gratis na BD
             PreparedStatement ps = conn.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - 1 WHERE id=?");
             ps.setInt(1, socio.getID());
 
+            ps.executeUpdate();
+            
+            ps = conn.prepareStatement("UPDATE socios SET jogosTotal = jogosTotal + ? WHERE id = ?");
+            ps.setInt(1, 1);
+            ps.setInt(2, socio.getID());
             ps.executeUpdate();
 
             //registar no historico de creditos
@@ -412,126 +422,134 @@ public class ConsoleFrame extends javax.swing.JFrame {
             ps2.executeUpdate();
 
         } catch (SQLException ex) {
-
+            JOptionPane.showMessageDialog(null, ex, "erro", JOptionPane.ERROR);
         }
-
         updateInfo();
-
 
     }//GEN-LAST:event_jogogratisBtnMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
+    private void fichaSocioBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fichaSocioBtnMouseClicked
+        // TODO add your handling code here:
+        fichaSócio fs = new fichaSócio(socio, profilePicture.getIcon());
+        fs.setVisible(true);
+    }//GEN-LAST:event_fichaSocioBtnMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SelectedIDlabel;
+    private javax.swing.JButton addCreditsBtn;
     private javax.swing.JButton checkHistoryBtn;
+    private javax.swing.JButton fichaSocioBtn;
+    private javax.swing.JLabel freeGamesLabel;
     private javax.swing.JTextField howMuchLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel idLabel;
+    private javax.swing.JTextField idTextField;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jogogratisBtn;
+    private javax.swing.JLabel jogosSeguidosLabel;
+    private javax.swing.JLabel labelCreditos;
     private javax.swing.JButton massInsertBtn;
-    private javax.swing.JLabel profilePiicture;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JButton newSocioBtn;
+    private javax.swing.JLabel profilePicture;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JButton substractBtn;
     // End of variables declaration//GEN-END:variables
 
     private void updateInfo() {
 
-        ImageIcon foto;
-
-        //esta funcao apenas atualiza o NOME, ID, CRÉDITOS e JOGOS GRATIS
-        //o resto da informação está atualizada no sócio mas esta função apenas atualiza o GUI
-        boolean isOnServer; //verifica se a foto está no servidor
-        File file = new File("./img/" + socio.getID() + ".png"); //tenta obter o ficheiro da foto local
-
-        //jLabel1 -> Nome do sócio
-        //jLabel2 -> ID do sócio
-        //jLabel3 -> créditos do sócio
-        jLabel1.setText(String.valueOf(socio.getID()));
-        jLabel2.setText("Nome: " + socio.getNome());
-        jLabel3.setText("Créditos: " + String.valueOf(socio.getCreditos()));
-        jLabel5.setText("Jogos seguidos: "+String.valueOf(socio.getJogos_seguidos()));
-
-        if (!file.isFile()) { //se não tem a foto local
-
-            try {
-                isOnServer = ftpClient.fileExistsInServer("/img/" + socio.getID() + ".png"); //procurar o ficheiro no servidor ftp
-                System.out.println(isOnServer);
-                if (isOnServer) {
-                    ftpClient.fileDownload(socio.getID());
-
-                    foto = new ImageIcon("./img/" + socio.getID() + ".png");
-                    Image image = foto.getImage();
-                    Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
-                    foto = new ImageIcon(newImage);
-                    profilePiicture.setIcon(foto);
-
-                } else {
-                    foto = new ImageIcon("./img/" + socio.getID() + ".png");
-                    Image image = foto.getImage();
-                    Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
-                    foto = new ImageIcon(newImage);
-                    profilePiicture.setIcon(foto);
-                    System.out.println("it aint here or server");
-                }
-
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(new Frame(), ex, "erro", JOptionPane.ERROR);
-            }
-
-        } else {
-            foto = new ImageIcon("./img/" + socio.getID() + ".png");
-            Image image = foto.getImage();
-            Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
-            foto = new ImageIcon(newImage);
-            profilePiicture.setIcon(foto);
-            //profilePiicture.setIcon(new javax.swing.ImageIcon("./img/" + socio.getID() + ".png"));
-        }
+        loadFoto();
 
         if (socio.getID() != -1) {
             //foi encontrado um sócio
-            checkHistoryBtn.setEnabled(true);
-            jButton3.setEnabled(true);
-            jButton2.setEnabled(true);
-            checkHistoryBtn.setContentAreaFilled(true);
-            jButton2.setContentAreaFilled(true);
-            jButton3.setContentAreaFilled(true);
-
+            enableButtons();
+            
             if (socio.getJogos_gratis() > 0) {
 
                 //se tiver um jogo grátis para usar
-                jLabel4.setText("Jogos grátis: " + socio.getJogos_gratis());
-                jLabel4.setForeground(new Color(51, 153, 51));
+                freeGamesLabel.setText("Jogos grátis: " + socio.getJogos_gratis());
+                freeGamesLabel.setForeground(new Color(51, 153, 51));
                 jogogratisBtn.setEnabled(true);
                 jogogratisBtn.setContentAreaFilled(true);
             } else {
-                jLabel4.setText("Jogos Grátis: 0");
-                jLabel4.setForeground(Color.black);
+                freeGamesLabel.setText("Jogos Grátis: 0");
+                freeGamesLabel.setForeground(Color.black);
                 jogogratisBtn.setEnabled(false);
                 jogogratisBtn.setContentAreaFilled(false);
             }
 
         } else {
-            checkHistoryBtn.setEnabled(false);
-            jButton3.setEnabled(false);
-            jButton2.setEnabled(false);
-            checkHistoryBtn.setContentAreaFilled(false);
-            jButton2.setContentAreaFilled(false);
-            jButton3.setContentAreaFilled(false);
-            jogogratisBtn.setEnabled(false);
-            jogogratisBtn.setContentAreaFilled(false);
-            jLabel4.setText("Jogos grátis: 0");
-            jLabel4.setForeground(Color.black);
+            disableButtons();
         }
+
+    }
+
+    private void loadFoto() {
+        ImageIcon foto;
+
+        File file = new File("./img/" + socio.getID() + ".png"); //tenta obter o ficheiro da foto local
+
+        idLabel.setText(String.valueOf(socio.getID()));
+        nameLabel.setText("Nome: " + socio.getNome());
+        labelCreditos.setText("Créditos: " + String.valueOf(socio.getCreditos()));
+        jogosSeguidosLabel.setText("Jogos seguidos: " + String.valueOf(socio.getJogos_seguidos()));
+
+        if (!file.isFile()) { //se não tem a foto local
+
+            try { //procurar foto no servidor
+                if (ftpClient.fileExistsInServer("/img/" + socio.getID() + ".png")) {
+                    System.out.println("Foto disponível no servidor");
+
+                    ftpClient.fileDownload(socio.getID());
+
+                    foto = new ImageIcon("./img/" + socio.getID() + ".png");
+                    Image image = foto.getImage();
+                    Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);//resize photo to 300 x 300
+                    foto = new ImageIcon(newImage);
+                    profilePicture.setIcon(foto);
+
+                } else { //its not local or online
+                    foto = new ImageIcon("./img/-1.png");
+                    Image image = foto.getImage();
+                    Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
+                    foto = new ImageIcon(newImage);
+                    profilePicture.setIcon(foto);
+                    System.out.println("O sócio selecionado não tem foto");
+                }
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex, "erro", JOptionPane.ERROR);
+            }
+
+        } else { //photo is available locally
+            foto = new ImageIcon("./img/" + socio.getID() + ".png");
+            Image image = foto.getImage();
+            Image newImage = image.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH); //resize photo to 300x300
+            foto = new ImageIcon(newImage);
+            profilePicture.setIcon(foto);
+        }
+    }
+
+    private void disableButtons() {
+        checkHistoryBtn.setEnabled(false);
+        substractBtn.setEnabled(false);
+        addCreditsBtn.setEnabled(false);
+        checkHistoryBtn.setContentAreaFilled(false);
+        addCreditsBtn.setContentAreaFilled(false);
+        substractBtn.setContentAreaFilled(false);
+        jogogratisBtn.setEnabled(false);
+        jogogratisBtn.setContentAreaFilled(false);
+        freeGamesLabel.setText("Jogos grátis: 0");
+        freeGamesLabel.setForeground(Color.black);
+    }
+    
+    private void enableButtons(){
+        checkHistoryBtn.setEnabled(true);
+            substractBtn.setEnabled(true);
+            addCreditsBtn.setEnabled(true);
+            checkHistoryBtn.setContentAreaFilled(true);
+            addCreditsBtn.setContentAreaFilled(true);
+            substractBtn.setContentAreaFilled(true);
 
     }
 }

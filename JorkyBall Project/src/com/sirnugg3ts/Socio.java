@@ -3,13 +3,6 @@
 */
 package com.sirnugg3ts;
 
-/*
-    -Ao remover créditos, a verificação é efetuada client side, na função jButton3MouseClicked do ConsoleFrame.java, sendo que update_creditos apenas envia a informação e não efetua qualquer verificação
-
-
-*/
-
-import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -19,10 +12,6 @@ import java.sql.ResultSetMetaData;
 import javax.swing.JOptionPane;
 
 
-/**
- *
- * @author diogo
- */
 public class Socio {
     
     //propriedades do sócio
@@ -36,12 +25,13 @@ public class Socio {
     private java.sql.Date dataInscricao;
     private int jogos_seguidos;
     private int jogos_gratis;
+    private int jogosTotal;    
     
     
+    //construtor base
     public Socio() {
         nome=email=null;
-        ID = jogos_seguidos= jogos_gratis =-1;
-        creditos = -1;
+        creditos=ID = jogos_seguidos= jogos_gratis =jogosTotal=-1;
         dataInscricao=dataNascimento=null;
 
     }
@@ -60,7 +50,7 @@ public class Socio {
 
             patat.executeUpdate();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e, "Erro!", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -71,7 +61,7 @@ public class Socio {
         try ( Connection conn = bd.connect()) {
             
             Statement stat = conn.createStatement();
-            boolean hasResultSet = stat.execute("SELECT nome,creditos,email,nTlm,dataNascimento,dataInscricao,jogos_seguidos,jogos_gratis FROM socios WHERE id = " + id);
+            boolean hasResultSet = stat.execute("SELECT nome,creditos,email,nTlm,dataNascimento,dataInscricao,jogos_seguidos,jogos_gratis,jogosTotal FROM socios WHERE id = " + id);
             if (hasResultSet) {
                 ResultSet resultado = stat.getResultSet();
                 resultado.next();
@@ -85,13 +75,14 @@ public class Socio {
                 this.dataInscricao = resultado.getDate("dataInscricao");
                 this.jogos_seguidos = resultado.getInt("jogos_seguidos");
                 this.jogos_gratis = resultado.getInt("jogos_gratis");
+                this.jogosTotal = resultado.getInt("jogosTotal");
             } 
         } catch (Exception e) {
             System.err.println(e);
             this.nome = this.email=null;
-            ID = creditos = numeroTlm = jogos_gratis = jogos_seguidos = -1;
+            ID = creditos = numeroTlm = jogos_gratis = jogos_seguidos = jogosTotal=-1;
             dataNascimento = dataInscricao = null;
-            JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -104,8 +95,7 @@ public class Socio {
 
                 return resultado.getInt("id");
             }
-        } catch (SQLException ex) {
-        }
+        } catch (SQLException ex) {}
         return -1;
     }
 
@@ -118,11 +108,21 @@ public class Socio {
         
         try ( Connection conn = bd.connect()) {
             
+            /*
+            ATUALIZAR JOGOS TOTAL!!!
+            */
+            
             PreparedStatement patat = conn.prepareStatement("UPDATE socios SET creditos = ? WHERE id = ?");
             
             patat.setInt(1, creditos);
             patat.setInt(2, ID);
             patat.executeUpdate();
+            
+            patat = conn.prepareStatement("UPDATE socios SET jogosTotal = jogosTotal + ? WHERE id = ?");
+            patat.setInt(1, alt);
+            patat.setInt(2, ID);
+            patat.executeUpdate();
+            
             
             //vai registar a alteração na tabela historico_creditos
             //SE ESTA FUNÇÃO NÃO ESTIVER A FUNCIONAR, INSERIR conn.setSchema("historico_creditos")
@@ -143,7 +143,7 @@ public class Socio {
             patat2.executeUpdate();
             
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(new Frame(), e, "Erro!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -155,35 +155,12 @@ public class Socio {
             p.setInt(3, ID);
             p.executeUpdate();
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(new Frame(), e,"erro",JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(null, e,"erro",JOptionPane.ERROR);
         }
     }
     
    
 
-    public String getNome() {
-        return nome;
-    }
-
-    public int getCreditos() {
-        return creditos;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setCreditos(int creditos) {
-        this.creditos = creditos;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
 
     public void displayAllData() {
         try ( Connection conn = bd.connect();  Statement stat = conn.createStatement()) {
@@ -210,8 +187,34 @@ public class Socio {
 
         } catch (SQLException e) {
             System.err.println(e);
-            e.printStackTrace();
         }
+    }
+    
+    
+    //GET and SET
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public int getCreditos() {
+        return creditos;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCreditos(int creditos) {
+        this.creditos = creditos;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public int getNumeroTlm() {
@@ -260,6 +263,14 @@ public class Socio {
 
     public void setJogos_gratis(int jogos_gratis) {
         this.jogos_gratis = jogos_gratis;
+    }
+
+    public int getJogosTotal() {
+        return jogosTotal;
+    }
+
+    public void setJogosTotal(int jogosTotal) {
+        this.jogosTotal = jogosTotal;
     }
 
 

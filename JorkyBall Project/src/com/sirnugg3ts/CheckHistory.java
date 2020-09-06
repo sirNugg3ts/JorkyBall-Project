@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+© 2020, Diogo Pascoal. All rights reserved.
  */
 package com.sirnugg3ts;
 
@@ -9,24 +7,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Calendar;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 
 
-/**
- *
- * @author diogo
- */
 public class CheckHistory extends javax.swing.JFrame {
     
-    int id;
-    String dataI;
-    String dataE;
+    private int id;
+    private String dataI;
+    private String dataE;
     
 
     /**

@@ -1,6 +1,9 @@
+/*
+© 2020, Diogo Pascoal. All rights reserved.
+ */
+
 package com.sirnugg3ts;
 
-import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +24,7 @@ public class massInsert extends javax.swing.JFrame {
         try {
             listaID = obtemListaId();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(new Frame(), ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex, "Erro!", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
     }
@@ -206,11 +209,11 @@ public class massInsert extends javax.swing.JFrame {
                 listaDeIDaAlterar.add(id);
                 addIdToTableGUI(id);
             } else {
-                JOptionPane.showMessageDialog(new Frame(), "ID repetido", "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "ID repetido", "Erro!", JOptionPane.ERROR_MESSAGE);
             }
 
         } else {
-            JOptionPane.showMessageDialog(new Frame(), "Este ID não existe!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Este ID não existe!", "Erro!", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_jButton1MouseClicked
@@ -231,21 +234,18 @@ public class massInsert extends javax.swing.JFrame {
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
 
-        //CREDITOS REMOVIDOS NÃO ESTÃO A SER CORRETAMENTE ATUALIZADOS
         int creditosRem = Integer.parseInt(jTextField1.getText());
 
         for (int i = 0; i < listaDeIDaAlterar.size(); i++) {
 
-            int creditosATirar = creditosRem;
-            int freeGamesToUse = 0;
-
+            
             Socio socio_atualizar = new Socio();
             socio_atualizar.getsSocioFromDB(listaDeIDaAlterar.get(i));
 
             //verificar se tem creditos suficientes ou jogos grátis para 
             if (socio_atualizar.getCreditos() + socio_atualizar.getJogos_gratis() < creditosRem) {
 
-                JOptionPane.showMessageDialog(new Frame(), "O Sócio com ID " + socio_atualizar.getID() + " não tem créditos suficientes\n"
+                JOptionPane.showMessageDialog(null, "O Sócio com ID " + socio_atualizar.getID() + " não tem créditos suficientes\n"
                         + "Não serão removidos créditos", "Erro de créditos!", JOptionPane.WARNING_MESSAGE);
 
                 break;
@@ -278,7 +278,7 @@ public class massInsert extends javax.swing.JFrame {
                         ps2.executeUpdate();
 
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(new Frame(), ex, "erro", JOptionPane.ERROR);
+                        JOptionPane.showMessageDialog(null, ex, "erro", JOptionPane.ERROR);
                     }
 
                     break;
@@ -327,7 +327,7 @@ public class massInsert extends javax.swing.JFrame {
                     
                     
                     if (socio_atualizar.getJogos_seguidos()>=jorkyball.JOGOSGRATIS) {
-                        JOptionPane.showMessageDialog(new Frame(), "O sócio "+socio_atualizar.getNome() + "ganhou 1 jogo grátis!","Jogo Grátis!",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "O sócio "+socio_atualizar.getNome() + "ganhou 1 jogo grátis!","Jogo Grátis!",JOptionPane.INFORMATION_MESSAGE);
                         socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos()-jorkyball.JOGOSGRATIS);
                         socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis()+1);
                         
