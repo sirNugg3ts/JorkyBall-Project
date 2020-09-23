@@ -1,6 +1,6 @@
 /*
 © 2020, Diogo Pascoal. All rights reserved.
-*/
+ */
 package com.sirnugg3ts;
 
 import java.sql.Connection;
@@ -11,11 +11,9 @@ import java.sql.Statement;
 import java.sql.ResultSetMetaData;
 import javax.swing.JOptionPane;
 
-
 public class Socio {
-    
-    //propriedades do sócio
 
+    //propriedades do sócio
     private String nome;
     private int ID;
     private int creditos;
@@ -25,20 +23,19 @@ public class Socio {
     private java.sql.Date dataInscricao;
     private int jogos_seguidos;
     private int jogos_gratis;
-    private int jogosTotal;    
-    
-    
+    private int jogosTotal;
+
     //construtor base
     public Socio() {
-        nome=email=null;
-        creditos=ID = jogos_seguidos= jogos_gratis =jogosTotal=-1;
-        dataInscricao=dataNascimento=null;
+        nome = email = null;
+        creditos = ID = jogos_seguidos = jogos_gratis = jogosTotal = -1;
+        dataInscricao = dataNascimento = null;
 
     }
 
-    public boolean insereNovoSocio(){
+    public boolean insereNovoSocio() {
         //returns true if sucess uploading the new Socio
-        try ( Connection conn = bd.connect()) {
+        try (Connection conn = bd.connect()) {
             PreparedStatement patat = conn.prepareStatement("INSERT INTO socios (id,nome,creditos,email,nTlm,dataNascimento,dataInscricao) VALUES (?, ?, ?,?,?,?,?)");
             patat.setInt(1, ID);
             patat.setString(2, nome);
@@ -56,10 +53,10 @@ public class Socio {
         return true;
     }
 
-    public void getsSocioFromDB(int id){
+    public void getsSocioFromDB(int id) {
         //gets ALL the info from an id
-        try ( Connection conn = bd.connect()) {
-            
+        try (Connection conn = bd.connect()) {
+
             Statement stat = conn.createStatement();
             boolean hasResultSet = stat.execute("SELECT nome,creditos,email,nTlm,dataNascimento,dataInscricao,jogos_seguidos,jogos_gratis,jogosTotal FROM socios WHERE id = " + id);
             if (hasResultSet) {
@@ -76,18 +73,18 @@ public class Socio {
                 this.jogos_seguidos = resultado.getInt("jogos_seguidos");
                 this.jogos_gratis = resultado.getInt("jogos_gratis");
                 this.jogosTotal = resultado.getInt("jogosTotal");
-            } 
+            }
         } catch (Exception e) {
             System.err.println(e);
-            this.nome = this.email=null;
-            ID = creditos = numeroTlm = jogos_gratis = jogos_seguidos = jogosTotal=-1;
+            this.nome = this.email = null;
+            ID = creditos = numeroTlm = jogos_gratis = jogos_seguidos = jogosTotal = -1;
             dataNascimento = dataInscricao = null;
             JOptionPane.showMessageDialog(null, e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public int getLastID()  {
-        try ( Connection conn = bd.connect();  Statement stat = conn.createStatement()) {
+    public int getLastID() {
+        try (Connection conn = bd.connect(); Statement stat = conn.createStatement()) {
             boolean hasResultSet = stat.execute("SELECT id FROM socios ORDER BY id DESC limit 1");
             if (hasResultSet) {
                 ResultSet resultado = stat.getResultSet();
@@ -95,75 +92,65 @@ public class Socio {
 
                 return resultado.getInt("id");
             }
-        } catch (SQLException ex) {}
+        } catch (SQLException ex) {
+        }
         return -1;
     }
 
-    public void updateCreditos(boolean op,int alt) {
+    public void updateCreditos(boolean op, int alt) {
         //if op == true -> adicionar
         //if op == false -> remover
         //alt -> quantidade de créditos a serem usados
-        
+
         //o objeto Sócio do programa já está atualizado, esta função irá apenas enviar a informação
-        
-        try ( Connection conn = bd.connect()) {
-            
-            /*
-            ATUALIZAR JOGOS TOTAL!!!
-            */
-            
+        try (Connection conn = bd.connect()) {
             PreparedStatement patat = conn.prepareStatement("UPDATE socios SET creditos = ? WHERE id = ?");
-            
+
             patat.setInt(1, creditos);
             patat.setInt(2, ID);
             patat.executeUpdate();
-            
+
             patat = conn.prepareStatement("UPDATE socios SET jogosTotal = jogosTotal + ? WHERE id = ?");
             patat.setInt(1, alt);
             patat.setInt(2, ID);
             patat.executeUpdate();
-            
-            
+
             //vai registar a alteração na tabela historico_creditos
             //SE ESTA FUNÇÃO NÃO ESTIVER A FUNCIONAR, INSERIR conn.setSchema("historico_creditos")
             //conn.setSchema("historico_creditos");
-            
             PreparedStatement patat2 = conn.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?)");
             patat2.setInt(1, ID);
             java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-            patat2.setDate(2,sqlDate);
-            patat2.setInt(3,alt);
-            
-            
+            patat2.setDate(2, sqlDate);
+            patat2.setInt(3, alt);
+
             if (op) {
                 patat2.setString(4, "adicionar");
-            }else
+            } else {
                 patat2.setString(4, "remover");
-            
+            }
+
             patat2.executeUpdate();
-            
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e, "Erro!", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    public void updateJogosSeguidos(){
-        try(Connection conn = bd.connect()){
+
+    public void updateJogosSeguidos() {
+        try (Connection conn = bd.connect()) {
             PreparedStatement p = conn.prepareStatement("UPDATE socios SET jogos_seguidos=?,jogos_gratis=? WHERE id=?");
             p.setInt(1, jogos_seguidos);
             p.setInt(2, jogos_gratis);
             p.setInt(3, ID);
             p.executeUpdate();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"erro",JOptionPane.ERROR);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "erro", JOptionPane.ERROR);
         }
     }
-    
-   
-
 
     public void displayAllData() {
-        try ( Connection conn = bd.connect();  Statement stat = conn.createStatement()) {
+        try (Connection conn = bd.connect(); Statement stat = conn.createStatement()) {
 
             boolean hasResultSet = stat.execute("SELECT * FROM socios");
 
@@ -189,10 +176,7 @@ public class Socio {
             System.err.println(e);
         }
     }
-    
-    
-    //GET and SET
-    
+
     public String getNome() {
         return nome;
     }
@@ -272,7 +256,4 @@ public class Socio {
     public void setJogosTotal(int jogosTotal) {
         this.jogosTotal = jogosTotal;
     }
-
-
-
 }

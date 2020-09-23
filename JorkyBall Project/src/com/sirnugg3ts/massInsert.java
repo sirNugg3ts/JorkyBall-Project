@@ -1,7 +1,6 @@
 /*
 © 2020, Diogo Pascoal. All rights reserved.
  */
-
 package com.sirnugg3ts;
 
 import java.sql.Connection;
@@ -48,7 +47,6 @@ public class massInsert extends javax.swing.JFrame {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -192,7 +190,6 @@ public class massInsert extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
         int id = Integer.parseInt(idadicionar.getText());
         if (checkIfIdExists(id)) {
 
@@ -211,15 +208,12 @@ public class massInsert extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "ID repetido", "Erro!", JOptionPane.ERROR_MESSAGE);
             }
-
         } else {
             JOptionPane.showMessageDialog(null, "Este ID não existe!", "Erro!", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        // TODO add your handling code here:
         int creditosAdd = Integer.parseInt(jTextField1.getText());
 
         for (int i = 0; i < listaDeIDaAlterar.size(); i++) {
@@ -230,8 +224,7 @@ public class massInsert extends javax.swing.JFrame {
 
             socio_atualizar.updateCreditos(true, creditosAdd);
         }
-        JOptionPane.showMessageDialog(null, "Operações Concluídas","Sucesso",JOptionPane.INFORMATION_MESSAGE);
-        
+        JOptionPane.showMessageDialog(null, "Operações Concluídas", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
@@ -240,7 +233,6 @@ public class massInsert extends javax.swing.JFrame {
 
         for (int i = 0; i < listaDeIDaAlterar.size(); i++) {
 
-            
             Socio socio_atualizar = new Socio();
             socio_atualizar.getsSocioFromDB(listaDeIDaAlterar.get(i));
 
@@ -292,33 +284,23 @@ public class massInsert extends javax.swing.JFrame {
 
             for (int j = 0; j < creditosRem; j++) {
 
-               
-                    //se não tiver jogos gratis para usar, tirar 1 crédito
-                    socio_atualizar.setCreditos(socio_atualizar.getCreditos() - 1);
-                    socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos()+1);
-                    
-                    
-                    if (socio_atualizar.getJogos_seguidos()>=jorkyball.JOGOSGRATIS) {
-                        JOptionPane.showMessageDialog(null, "O sócio "+socio_atualizar.getNome() + "ganhou 1 jogo grátis!","Jogo Grátis!",JOptionPane.INFORMATION_MESSAGE);
-                        socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos()-jorkyball.JOGOSGRATIS);
-                        socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis()+1);
-                        
-                    }
-                    socio_atualizar.updateCreditos(false, 1);
-                    socio_atualizar.updateJogosSeguidos();
-                    
-                    
-                }
+                socio_atualizar.setCreditos(socio_atualizar.getCreditos() - 1);
+                socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos() + 1);
 
-            
+                if (socio_atualizar.getJogos_seguidos() >= jorkyball.JOGOSGRATIS) {
+                    JOptionPane.showMessageDialog(null, "O sócio " + socio_atualizar.getNome() + "ganhou 1 jogo grátis!", "Jogo Grátis!", JOptionPane.INFORMATION_MESSAGE);
+                    socio_atualizar.setJogos_seguidos(socio_atualizar.getJogos_seguidos() - jorkyball.JOGOSGRATIS);
+                    socio_atualizar.setJogos_gratis(socio_atualizar.getJogos_gratis() + 1);
+
+                }
+                socio_atualizar.updateCreditos(false, 1);
+                socio_atualizar.updateJogosSeguidos();
+
+            }
 
         }
-           JOptionPane.showMessageDialog(null, "Operações Concluídas","Sucesso",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Operações Concluídas", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton3MouseClicked
-
-    /**
-     * @param args the command line arguments
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idadicionar;
     private javax.swing.JButton jButton1;

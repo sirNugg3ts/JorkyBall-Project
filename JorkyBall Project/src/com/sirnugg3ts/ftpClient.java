@@ -1,6 +1,6 @@
 /*
 © 2020, Diogo Pascoal. All rights reserved.
-*/
+ */
 package com.sirnugg3ts;
 
 import java.io.BufferedOutputStream;
@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-
 
 public class ftpClient {
 
