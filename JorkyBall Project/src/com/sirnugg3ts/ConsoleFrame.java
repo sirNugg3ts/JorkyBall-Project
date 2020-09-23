@@ -300,21 +300,15 @@ public class ConsoleFrame extends javax.swing.JFrame {
             for (int j = 0; j < creditosRem; j++) {
                     socio.setCreditos(socio.getCreditos() - 1);
                     socio.setJogos_seguidos(socio.getJogos_seguidos() + 1);
-
                     if (socio.getJogos_seguidos() >= jorkyball.JOGOSGRATIS) {
                         JOptionPane.showMessageDialog(new Frame(), "O sócio " + socio.getNome() + "ganhou 1 jogo grátis!", "Jogo Grátis!", JOptionPane.INFORMATION_MESSAGE);
                         socio.setJogos_seguidos(socio.getJogos_seguidos() - jorkyball.JOGOSGRATIS);
                         socio.setJogos_gratis(socio.getJogos_gratis() + 1);
-
                     }
                     socio.updateCreditos(false, 1);
                     socio.updateJogosSeguidos();
-
                 }
-
             }
-        
-
         updateInfo();
     }//GEN-LAST:event_substractBtnMouseClicked
 
