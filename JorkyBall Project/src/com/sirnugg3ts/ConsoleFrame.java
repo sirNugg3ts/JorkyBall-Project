@@ -298,39 +298,6 @@ public class ConsoleFrame extends javax.swing.JFrame {
             }
 
             for (int j = 0; j < creditosRem; j++) {
-
-                //se tiver jogos gratis perguntar se o quer usar
-                if (socio.getJogos_gratis() > 0 && creditosRem > 1 && j > 0) {
-
-                    Object[] options = {"Sim", "Não"};
-                    int opcao = JOptionPane.showOptionDialog(null, "O sócio " + socio.getNome() + " tem um jogo grátis que pode usar em vez de um crédito, deseja utilizar?",
-                            "Jogo Grátis por usar",
-                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "Não");
-                    if (opcao == 0) {
-                        socio.setJogos_gratis(socio.getJogos_gratis() - 1);
-                        //atualizar no servidor
-
-                        try ( Connection con = bd.connect()) {
-                            PreparedStatement ps = con.prepareStatement("UPDATE socios SET jogos_gratis = jogos_gratis - ? WHERE id=?");
-                            ps.setInt(1, 1);
-                            ps.setInt(2, socio.getID());
-                            ps.executeUpdate();
-
-                            //registar no historico de creditos os jogos gratis
-                            PreparedStatement ps2 = con.prepareStatement("INSERT INTO historico_creditos (id,data,creditos,operacao) VALUES (?,?,?,?) ");
-                            ps2.setInt(1, socio.getID());
-                            ps2.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-                            ps2.setInt(3, 0);
-                            ps2.setString(4, "Jogo Grátis");
-                            ps2.executeUpdate();
-                        } catch (SQLException e) {
-
-                        }
-
-                    }
-
-                } else {
-                    //se não tiver jogos gratis para usar, tirar 1 crédito
                     socio.setCreditos(socio.getCreditos() - 1);
                     socio.setJogos_seguidos(socio.getJogos_seguidos() + 1);
 
@@ -346,7 +313,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
                 }
 
             }
-        }
+        
 
         updateInfo();
     }//GEN-LAST:event_substractBtnMouseClicked
