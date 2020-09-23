@@ -534,6 +534,8 @@ public class ConsoleFrame extends javax.swing.JFrame {
         checkHistoryBtn.setEnabled(false);
         substractBtn.setEnabled(false);
         addCreditsBtn.setEnabled(false);
+        fichaSocioBtn.setEnabled(false);
+        fichaSocioBtn.setContentAreaFilled(false);
         checkHistoryBtn.setContentAreaFilled(false);
         addCreditsBtn.setContentAreaFilled(false);
         substractBtn.setContentAreaFilled(false);
@@ -550,6 +552,8 @@ public class ConsoleFrame extends javax.swing.JFrame {
             checkHistoryBtn.setContentAreaFilled(true);
             addCreditsBtn.setContentAreaFilled(true);
             substractBtn.setContentAreaFilled(true);
+                    fichaSocioBtn.setEnabled(true);
+        fichaSocioBtn.setContentAreaFilled(true);
 
     }
 }
